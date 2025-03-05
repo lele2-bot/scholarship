@@ -51,7 +51,7 @@ require 'connection.php';
 
    <div     >
    
-    <form action="process_login.php" method="post"> 
+    <form> 
 
     <h1>Welcome</h1>
     <h2>pumili ng isa</h2>

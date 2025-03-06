@@ -37,6 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $noofsiblings = $_POST["no_of_siblings"];
     $othereducationalassistance = $_POST["other_educational_assistance"];
     $customfieldid = $_POST["customfieldid"];
+    $coe_cor =$_POST["COE_COR"];
+    $certofindigency = $_POST["cert_of_indigency"];
 
     // Use Prepared Statements to prevent SQL Injection
     $sql = "INSERT INTO scholars 
@@ -45,17 +47,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         province1, sex, type_of_disability, citizenship, mobilenumber, email, tribal_member, 
         school_last_attended, school_address, year_level, school_sector, fathers_name, 
         mothers_name, fathers_address, mothers_address, fathers_occupation, mothers_occupation, 
-        gross_income, no_of_siblings, other_educational_assistance, customfieldid) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        gross_income, no_of_siblings, other_educational_assistance, customfieldid, COE_COR, cert_of_indigency) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?)";
 
 if ($stmt = $conn->prepare($sql)) {
-    $stmt->bind_param("issssssssisssssssssssssssssssiiss", 
+    $stmt->bind_param("sssssssssisssssssssssssssssssdissss", 
         $school_id, $first_name, $middle_name, $last_name, $maiden_name, $dob, $streetandbrgy,
         $towncitymunicipality, $province, $zipcode, $streetandbrgy1, $towncitymunicipality1,
         $province1, $sex, $typeofdisability, $citizenship, $mobilenumber, $email, $tribalmember,
         $schoollastattended, $schooladdress, $yearlevel, $schoolsector, $fathersname,
         $mothersname, $fathersaddress, $mothersaddress, $fathersoccupation, $mothersoccupation,
-        $grossincome, $noofsiblings, $othereducationalassistance, $customfieldid
+        $grossincome, $noofsiblings, $othereducationalassistance, $customfieldid, $coe_cor, $certofindigency
     );
 
         if ($stmt->execute()) {
@@ -414,13 +416,32 @@ if ($stmt = $conn->prepare($sql)) {
                     <label>Upload a 2x2 ID Picture</label>
                     </div>
                 <div>
-                    <input type="file" class="custom-file-label" id="customfieldid" name="customfieldid" onchange="displayImg(this,$(this))" accept="image/png, image/jpeg">                            
+                    <input type="file"  id="customfieldid" name="customfieldid" onchange="displayImg(this,$(this))" accept="image/png, image/jpeg, image/jpg">                            
+                    
                 </div>
                 <div>
 
                 </div>
             </div>
            <hr>
+           <h4>Documentary Requirements</h4>
+            <div class="form-group">
+                <div class ="p4">
+                    <label>Upload Certificate of Enrollment/Registration (COE/COR)</label>
+                    </div>
+                <div>
+                    <input type="file"  id="COE_COR" name="coe_cor" onchange="displayImg(this,$(this))" accept="image/png, image/jpeg, image/jpg">                            
+                </div>
+                <div class ="p4">
+                    <label>Upload Certificate of Indigency</label>
+                    </div>
+                <div>
+                    <input type="file"  id="cert_of_indigency" name="certofindigency" onchange="displayImg(this,$(this))" accept="image/png, image/jpeg, image/jpg">                            
+                </div>
+                
+            </div>
+           <hr>
+          
            
             
             <div class="btn-container">
@@ -428,6 +449,7 @@ if ($stmt = $conn->prepare($sql)) {
                 <p>Already have an account? <a href="login.php">Login</a></p>
             </div>
         </form>
+       
     </div>
   
 </body>

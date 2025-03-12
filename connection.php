@@ -12,12 +12,6 @@ $conn = new mysqli($db_host, $db_username, $db_password, $db_name);
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error); // Log this error for debugging
-    // In a production environment, you might want to display a more user-friendly message:
-    // die("Database error. Please try again later.");
+    
 }
-
-
-
-
-
 ?>

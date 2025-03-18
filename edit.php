@@ -91,10 +91,12 @@ if (isset($_POST['update'])) {
 
         /* Button styling */
         .form-buttons {
-            flex: 1 1 100%;
-            text-align: center;
-            margin-top: 10px;
+            display: flex;
+            justify-content: space-between; /* Pushes buttons to opposite sides */
+            width: 100%; /* Adjust width as needed */
+            padding: 10px;
         }
+        
 
         .btn {
             background: #007bff;
@@ -172,7 +174,7 @@ if (isset($_POST['update'])) {
             <input type="email" name="email" value="<?php echo htmlspecialchars($scholar['email'] ?? ''); ?>" required>
         </div>
         <div class="form-group">
-            <label>Email:</label>
+            <label>Number:</label>
             <input type="mobilenumber" name="mobilenumber" value="<?php echo htmlspecialchars($scholar['mobilenumber'] ?? ''); ?>" required>
         </div>
 
@@ -183,10 +185,11 @@ if (isset($_POST['update'])) {
                 <option value="Inactive" <?php if (($scholar['status'] ?? '') == "Inactive") echo "selected"; ?>>Inactive</option>
             </select>
         </div>
-
-        <div class="form-buttons">
-        <button type="button" class="btn" onclick="window.location.href='admindash.php'">Back</button>
-            <button onclick="alert('Changes Applied')" type="submit" class="btn" name="update">Update</button>
+       
+        <div  class="form-buttons">
+        <button   type="button" class="btn" onclick="window.location.href='admindash.php'">Back</button>
+        
+        <button  onclick="alert('Changes Applied')" type="submit" class="btn" name="update">Update</button>
            
            
         </div>

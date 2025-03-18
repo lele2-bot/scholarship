@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $customfieldid = $_POST["customfieldid"];
     $coe_cor = $_POST["COE_COR"];
     $certofindigency = $_POST["cert_of_indigency"];
-    $applicationstatus = $_POST["application_status"];
+    $applicationstatus = $_POST["status"];
 
     try {
         // Use a prepared statement to prevent SQL injection
@@ -71,13 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             province1, sex, type_of_disability, citizenship, mobilenumber, email, tribal_member, 
             school_last_attended, school_address, year_level, school_sector, fathers_name, 
             mothers_name, fathers_address, mothers_address, fathers_occupation, mothers_occupation, 
-            gross_income, no_of_siblings, other_educational_assistance, customfieldid, COE_COR, cert_of_indigency, application_status) 
+            gross_income, no_of_siblings, other_educational_assistance, customfieldid, COE_COR, cert_of_indigency, status) 
             VALUES (:school_id, :typeofscholarship, :first_name, :middle_name, :last_name, :maiden_name, :dob, :streetandbrgy, 
             :towncitymunicipality, :province, :zipcode, :streetandbrgy1, :towncitymunicipality1, 
             :province1, :sex, :typeofdisability, :citizenship, :mobilenumber, :email, :tribalmember, 
             :schoollastattended, :schooladdress, :yearlevel, :schoolsector, :fathersname, 
             :mothersname, :fathersaddress, :mothersaddress, :fathersoccupation, :mothersoccupation, 
-            :grossincome, :noofsiblings, :othereducationalassistance, :customfieldid, :coe_cor, :certofindigency, :applicationstatus)";
+            :grossincome, :noofsiblings, :othereducationalassistance, :customfieldid, :coe_cor, :certofindigency, :status)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ':customfieldid' => $customfieldid,
             ':coe_cor' => $coe_cor,
             ':certofindigency' => $certofindigency, 
-            ':applicationstatus' => $applicationstatus
+            ':status' => $applicationstatus
         ]);
 
         echo "<script>alert('Your application was submitted successfully.'); window.location.href='admindash.php';</script>";
@@ -142,8 +142,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
 	<link rel="stylesheet" href="styles.css">
-
-	<title>User Dashboard</title>
+    <link rel="icon" type="image/JPEG" href="img/mow.JPEG">
+	<title>Admin Dashboard</title>
 </head>
 <body>
 
@@ -231,6 +231,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $total_scholars = $row['total_scholars'];
           
           ?>
+          <?php
+
+
+            // Count for full Scholarship
+            $sqlFull = "SELECT COUNT(*) AS full_scholarship FROM scholars WHERE type_of_scholarship = 'Full Scholarship'";
+            $stmtFull = $pdo->query($sqlFull);
+            $rowFull = $stmtFull->fetch();
+            $full_scholarship = $rowFull['full_scholarship'];
+
+            // Count for Partial Scholarship
+            $sqlPartial = "SELECT COUNT(*) AS partial_scholarship FROM scholars WHERE type_of_scholarship = 'Partial Scholarship'";
+            $stmtPartial = $pdo->query($sqlPartial);
+            $rowPartial = $stmtPartial->fetch();
+            $partial_scholarship = $rowPartial['partial_scholarship'];
+
+            // Count for TDP Scholarship
+            $sqltdp = "SELECT COUNT(*) AS tdp_scholarship FROM scholars WHERE type_of_scholarship = 'TDP'";
+            $sqltdp = $pdo->query($sqltdp);
+            $rowtdp = $sqltdp->fetch();
+            $tdp_scholarship = $rowtdp['tdp_scholarship'];
+            ?>
+
           
           <ul class="box-info">
               <li>
@@ -241,6 +263,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </span>
               </li>
           </ul>
+          <ul class="box-info">
+              
+              <li>
+                  <i class='bx bxs-graduation'></i>
+                  <span class="text">
+                      <h3><?php echo htmlspecialchars($tdp_scholarship); ?></h3>
+                      <p>TDP Scholars</p>
+                  </span>
+              </li>
+              <li>
+                  <i class='bx bxs-graduation'></i>
+                  <span class="text">
+                      <h3><?php echo htmlspecialchars($partial_scholarship); ?></h3>
+                      <p>CHED Scholars</p>
+                  </span>
+              </li>
+              <li>
+                  <i class='bx bxs-graduation'></i>
+                  <span class="text">
+                      <h3><?php echo htmlspecialchars($full_scholarship); ?></h3>
+                      <p>Pakapak Scholars</p>
+                  </span>
+              </li>
+              <li>
+                  <i class='bx bxs-graduation'></i>
+                  <span class="text">
+                      <h3><?php echo htmlspecialchars($total_scholars); ?></h3>
+                      <p>Claire Scholars</p>
+                  </span>
+              </li>
+
+              
+          </ul>
+          
+
+          
 
 
           <?php
@@ -249,7 +307,7 @@ $stmt = $pdo->query($sql);
 $scholars = $stmt->fetchAll();
 ?>
 
-<h2>List of Scholars</h2>
+<h2>Full List of Scholars</h2>
 
 <table border="1">
     <thead>
@@ -312,6 +370,8 @@ $scholars = $stmt->fetchAll();
                         <option value="none">--SELECT--</option>
                         <option value="Full Scholarship">Full Scholarship</option>
                         <option value="Partial Scholarship">Partial Scholarship</option>
+                        <option value="TDP">TDP</option>
+                        <option value="CHED">CHED</option>
                         
                     </select>
                 </div>
@@ -403,11 +463,11 @@ $scholars = $stmt->fetchAll();
                 </div>
                 <div>
                     <label for="MobileNumber">Mobile Number</label>
-                    <input type="text" id="mobilenumber" name="mobilenumber" pattern ="^\+?[0-9]{10,15}$"required>
+                    <input type="text" id="mobilenumber"  name="mobilenumber" pattern="^[0-9]{11}$" placeholder="0922-992-2119" required>
                 </div>
                 <div>
                     <label for="Email">Email</label>
-                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"required>
+                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="someone@gmail.com"required>
                 </div>
                 <div>
                     <label for="TribalMember">Tribal Membership (If applicable)</label>
@@ -423,7 +483,7 @@ $scholars = $stmt->fetchAll();
 
                 <div>
                     <label for="SchoolIDNumber">School ID Number</label>
-                    <input type="text" id="school_id_number" name="school_id_number" required pattern="\d{4}-\d{4}-[A-Z]{2}">
+                    <input type="text" id="school_id_number" name="school_id_number"  pattern="\d{4}-\d{4}-[A-Z]{2}" placeholder="2025-1234-AB" required>
                 </div>
 
                 <div>
@@ -613,48 +673,7 @@ $scholars = $stmt->fetchAll();
     </div>
 </div>
 <!-- EDIT MODAL -->
-<div id="editmodal" class="modal">
-	<div class="modal-content">
-    <span class="close" id="closeEditModal">&times;</span>
-    <?php
 
-
-        if (isset($_GET['school_id_number'])) {
-            $id = $_GET['school_id_number'];
-            $stmt = $pdo->prepare("SELECT * FROM scholars WHERE school_id_number = :school_id_number");
-            $stmt->execute(['school_id_number' => $id]);
-            $scholar = $stmt->fetch(PDO::FETCH_ASSOC);
-        }
-
-        if (isset($_POST['update'])) {
-            $id = $_POST['school_id_number'];
-            $name = $_POST['firstname'];    
-            $email = $_POST['email'];
-            $status = $_POST['status'];
-
-            $stmt = $pdo->prepare("UPDATE scholars SET firstname = :firstname, email = :email, status = :status WHERE school_id_number = :school_id_number");
-            $stmt->execute(['firstname' => $name, 'email' => $email, 'status' => $status, 'school_id_number' => $id]);
-
-            header("Location: admindash.php");
-        }
-        ?>
-
-        <form method="post">
-            <input type="hidden" name="school_id_number" value="<?php echo $scholar['school_id_number']; ?>">
-            <label>Full Name:</label>
-            <input type="text" name="firstname" value="<?php echo $scholar['firstname']; ?>" required>
-            <label>Email:</label>
-            <input type="email" name="email" value="<?php echo $scholar['email']; ?>" required>
-            <label>Status:</label>
-            <select name="status">
-                <option value="Approved" <?php if ($scholar['status'] == "Active") echo "selected"; ?>>Active</option>
-                <option value="Rejected" <?php if ($scholar['status'] == "Inactive") echo "selected"; ?>>Inactive</option>
-            </select>
-            <button type="submit" name="update">Update</button>
-        </form>
-
-            </div>
-        </div>
 
 	<!-- STYLES -->
 	<style>
@@ -876,34 +895,7 @@ $scholars = $stmt->fetchAll();
         });
     });
 </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var modal = document.getElementById("editmodal");
-        var openEditModalBtn = document.getElementById("openEditModal");
-        var closeEditModalBtn = document.getElementById("closeEditModal");
 
-        // Ensure modal is hidden when page loads
-        modal.style.display = "none";
-
-        // Open modal only when button is clicked
-        openEditModalBtn.addEventListener("click", function(event) {
-            event.preventDefault();
-            modal.style.display = "flex"; // Show modal
-        });
-
-        // Close modal when clicking the close button (X)
-        closeEditModalBtn.addEventListener("click", function() {
-            modal.style.display = "none"; // Hide modal
-        });
-
-        // Close modal when clicking outside the modal content
-        window.addEventListener("click", function(event) {
-            if (event.target === modal) {
-                modal.style.display = "none"; // Hide modal
-            }
-        });
-    });
-</script>
 	<script src="scripts.js"></script>
 </body>
 </html>

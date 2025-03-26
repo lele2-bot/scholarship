@@ -2,6 +2,7 @@
 session_start();
 require 'dbConnect.php';
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signin'])) {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -233,24 +234,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           ?>
           <?php
 
-
-            // Count for full Scholarship
-            $sqlFull = "SELECT COUNT(*) AS full_scholarship FROM scholars WHERE type_of_scholarship = 'Full Scholarship'";
-            $stmtFull = $pdo->query($sqlFull);
-            $rowFull = $stmtFull->fetch();
-            $full_scholarship = $rowFull['full_scholarship'];
-
             // Count for Partial Scholarship
-            $sqlPartial = "SELECT COUNT(*) AS partial_scholarship FROM scholars WHERE type_of_scholarship = 'Partial Scholarship'";
-            $stmtPartial = $pdo->query($sqlPartial);
-            $rowPartial = $stmtPartial->fetch();
-            $partial_scholarship = $rowPartial['partial_scholarship'];
+            $sqlched = "SELECT COUNT(*) AS ched_scholarship FROM scholars WHERE type_of_scholarship = 'CHED'";
+            $sqlched = $pdo->query($sqlched);
+            $rowched = $sqlched->fetch();
+            $ched_scholarship = $rowched['ched_scholarship'];
 
             // Count for TDP Scholarship
             $sqltdp = "SELECT COUNT(*) AS tdp_scholarship FROM scholars WHERE type_of_scholarship = 'TDP'";
             $sqltdp = $pdo->query($sqltdp);
             $rowtdp = $sqltdp->fetch();
             $tdp_scholarship = $rowtdp['tdp_scholarship'];
+
+             // Count for full Scholarship
+             $sqlFull = "SELECT COUNT(*) AS full_scholarship FROM scholars WHERE type_of_scholarship = 'Full Scholarship'";
+             $stmtFull = $pdo->query($sqlFull);
+             $rowFull = $stmtFull->fetch();
+             $full_scholarship = $rowFull['full_scholarship'];
             ?>
 
           
@@ -275,7 +275,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <li>
                   <i class='bx bxs-graduation'></i>
                   <span class="text">
-                      <h3><?php echo htmlspecialchars($partial_scholarship); ?></h3>
+                      <h3><?php echo htmlspecialchars($ched_scholarship); ?></h3>
                       <p>CHED Scholars</p>
                   </span>
               </li>
@@ -334,10 +334,11 @@ $scholars = $stmt->fetchAll();
                     <td><?php echo htmlspecialchars($scholar['type_of_scholarship']); ?></td>
                     <td><?php echo htmlspecialchars($scholar['status']); ?></td>
                     <td>
-    <a href="edit.php?school_id_number=<?php echo htmlspecialchars($scholar['school_id_number']); ?>" id="openEditModal">Edit</a> | 
-    <a href="delete.php?school_id_number=<?php echo htmlspecialchars($scholar['school_id_number']); ?>" 
-       onclick="return confirm('Are you sure you want to delete this scholar?');">Delete</a>
-</td>
+                    <a href="view.php?school_id_number=<?php echo htmlspecialchars($scholar['school_id_number']); ?>">View</a> | 
+                    <a href="edit.php?school_id_number=<?php echo htmlspecialchars($scholar['school_id_number']); ?>" id="openEditModal">Edit</a> | 
+                    <a href="delete.php?school_id_number=<?php echo htmlspecialchars($scholar['school_id_number']); ?>" 
+                    onclick="return confirm('Are you sure you want to delete this scholar?');">Delete</a>
+                </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
@@ -825,7 +826,7 @@ $scholars = $stmt->fetchAll();
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            font-size: 18px;
+            font-size: 10px;
             text-align: left;
         }
         th, td {

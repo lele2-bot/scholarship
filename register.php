@@ -29,7 +29,7 @@ if (isset($_SESSION['errors'])) {
         }
         ?>
 
-        <form method="POST" action="login.php">
+        <form method="POST" action="index.php">
             <div class="input-group">
                 <i class="fas fa-id-card"></i>
                 <input type="text" name="school_id" id="school_id" placeholder="School ID (e.g., 2020-1080-AB)" required pattern="\d{4}-\d{4}-[A-Z]{2}">

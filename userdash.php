@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signin'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize input data
     $school_id = $_POST["school_id_number"];
+    $typeofscholarship = $_POST["type_of_scholarship"];
     $first_name = $_POST["firstname"];
     $middle_name = $_POST["middlename"];
     $last_name = $_POST["lastname"];
@@ -60,26 +61,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $customfieldid = $_POST["customfieldid"];
     $coe_cor = $_POST["COE_COR"];
     $certofindigency = $_POST["cert_of_indigency"];
+    $applicationstatus = $_POST["status"];
 
     try {
         // Use a prepared statement to prevent SQL injection
         $sql = "INSERT INTO scholars 
-            (school_id_number, firstname, middlename, lastname, maidenname, dob, street_and_brgy, 
+            (school_id_number, type_of_scholarship, firstname, middlename, lastname, maidenname, dob, street_and_brgy, 
             town_city_municipality, province, zipcode, street_and_brgy1, town_city_municipality1, 
             province1, sex, type_of_disability, citizenship, mobilenumber, email, tribal_member, 
             school_last_attended, school_address, year_level, school_sector, fathers_name, 
             mothers_name, fathers_address, mothers_address, fathers_occupation, mothers_occupation, 
-            gross_income, no_of_siblings, other_educational_assistance, customfieldid, COE_COR, cert_of_indigency) 
-            VALUES (:school_id, :first_name, :middle_name, :last_name, :maiden_name, :dob, :streetandbrgy, 
+            gross_income, no_of_siblings, other_educational_assistance, customfieldid, COE_COR, cert_of_indigency, status) 
+            VALUES (:school_id, :typeofscholarship, :first_name, :middle_name, :last_name, :maiden_name, :dob, :streetandbrgy, 
             :towncitymunicipality, :province, :zipcode, :streetandbrgy1, :towncitymunicipality1, 
             :province1, :sex, :typeofdisability, :citizenship, :mobilenumber, :email, :tribalmember, 
             :schoollastattended, :schooladdress, :yearlevel, :schoolsector, :fathersname, 
             :mothersname, :fathersaddress, :mothersaddress, :fathersoccupation, :mothersoccupation, 
-            :grossincome, :noofsiblings, :othereducationalassistance, :customfieldid, :coe_cor, :certofindigency)";
+            :grossincome, :noofsiblings, :othereducationalassistance, :customfieldid, :coe_cor, :certofindigency, :status)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':school_id' => $school_id,
+            ':typeofscholarship'=> $typeofscholarship,
             ':first_name' => $first_name,
             ':middle_name' => $middle_name,
             ':last_name' => $last_name,
@@ -113,14 +116,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ':othereducationalassistance' => $othereducationalassistance,
             ':customfieldid' => $customfieldid,
             ':coe_cor' => $coe_cor,
-            ':certofindigency' => $certofindigency
+            ':certofindigency' => $certofindigency, 
+            ':status' => $applicationstatus
         ]);
 
-        echo "<script>alert('Your application was submitted successfully.'); window.location.href='userdash.php';</script>";
+        echo "<script>alert('Your application was submitted successfully.'); window.location.href='admindash.php';</script>";
     } catch (PDOException $e) {
         echo "Unable to submit application: " . $e->getMessage();
     }
 }
+
 ?>
 
 
@@ -239,7 +244,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <hr>
             <h4>PERSONAL INFORMATION</h4>
         <hr>
-		
+        <div class="form-group" >
+		<div>
+                    <label for="type_of_scholarship">Choose Scholarship:</label>
+                    <select id="type_of_scholarship" name="type_of_scholarship" required> 
+
+                        <option value="none">--SELECT--</option>
+                        <option value="Full Scholarship">Full Scholarship</option>
+                        <option value="Partial Scholarship">Partial Scholarship</option>
+                        <option value="TDP">TDP</option>
+                        <option value="CHED">CHED</option>
+                        
+                    </select>
+                </div>
+        </div>
             <div class="form-group" >
                 <div class ="p1">
                     <p>Name</p>
@@ -327,11 +345,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div>
                     <label for="MobileNumber">Mobile Number</label>
-                    <input type="text" id="mobilenumber" name="mobilenumber" pattern ="^\+?[0-9]{10,15}$"required>
+                    <input type="text" id="mobilenumber"  name="mobilenumber" pattern="^[0-9]{11}$" placeholder="0922-992-2119" required>
                 </div>
                 <div>
                     <label for="Email">Email</label>
-                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"required>
+                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="someone@gmail.com"required>
                 </div>
                 <div>
                     <label for="TribalMember">Tribal Membership (If applicable)</label>
@@ -347,7 +365,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div>
                     <label for="SchoolIDNumber">School ID Number</label>
-                    <input type="text" id="school_id_number" name="school_id_number" required pattern="\d{4}-\d{4}-[A-Z]{2}">
+                    <input type="text" id="school_id_number" name="school_id_number"  pattern="\d{4}-\d{4}-[A-Z]{2}" placeholder="2025-1234-AB" required>
                 </div>
 
                 <div>
@@ -380,7 +398,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <hr>
             <h4>Family Background</h4>
-        
+        <hr>
             <div class="form-group">
                 <div>
 
@@ -453,7 +471,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <hr>
             <div class="form-group">
-                <div class ="p4">
+            <div class ="p4">
                 <label>Are you enjoying other educational financial assistance?</label>
                 </div>
                 <div>
@@ -488,6 +506,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
            <hr>
            <h4>Documentary Requirements</h4>
+           <hr>
            <div class="form-group">
                 <div class ="p4">
                     <label>Upload Certificate of Enrollment or Certificate of Registration (COE/COR)</label>
@@ -511,7 +530,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            <hr>
             <div class="btn-container">
                 <button type="submit">Register</button>
-                
+                <p>Already have an account? <a href="login.php">Login</a></p>
             </div>
         </form>
        

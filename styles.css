@@ -12,6 +12,7 @@ a {
 
 li {
 	list-style: none;
+	
 }
 
 :root {
@@ -404,8 +405,8 @@ body {
 	color: var(--pink);
 }
 #content main .box-info li .text h3 {
-	font-size: 24px;
-	font-weight: 600;
+	font-size: 100px;
+	font-weight: 200;
 	color: var(--dark);
 }
 #content main .box-info li .text p {

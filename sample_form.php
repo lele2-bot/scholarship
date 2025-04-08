@@ -180,11 +180,25 @@ if ($stmt = $conn->prepare($sql)) {
 <body>
     
     <div class="container">
-        <h2>Header</h2>
+    <h2>Header</h2>
         <form action="" method="POST">
         <hr>
             <h4>PERSONAL INFORMATION</h4>
         <hr>
+        <div class="form-group" >
+		<div>
+                    <label for="type_of_scholarship">Choose Scholarship:</label>
+                    <select id="type_of_scholarship" name="type_of_scholarship" required> 
+
+                        <option value="none">--SELECT--</option>
+                        <option value="Full Scholarship">Full Scholarship</option>
+                        <option value="Partial Scholarship">Partial Scholarship</option>
+                        <option value="TDP">TDP</option>
+                        <option value="CHED">CHED</option>
+                        
+                    </select>
+                </div>
+        </div>
             <div class="form-group" >
                 <div class ="p1">
                     <p>Name</p>
@@ -272,11 +286,11 @@ if ($stmt = $conn->prepare($sql)) {
                 </div>
                 <div>
                     <label for="MobileNumber">Mobile Number</label>
-                    <input type="text" id="mobilenumber" name="mobilenumber" required>
+                    <input type="text" id="mobilenumber"  name="mobilenumber" pattern="^[0-9]{11}$" placeholder="0922-992-2119" required>
                 </div>
                 <div>
                     <label for="Email">Email</label>
-                    <input type="text" id="email" name="email" required>
+                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="someone@gmail.com"required>
                 </div>
                 <div>
                     <label for="TribalMember">Tribal Membership (If applicable)</label>
@@ -292,7 +306,7 @@ if ($stmt = $conn->prepare($sql)) {
 
                 <div>
                     <label for="SchoolIDNumber">School ID Number</label>
-                    <input type="text" id="school_id_number" name="school_id_number" required>
+                    <input type="text" id="school_id_number" name="school_id_number"  pattern="\d{4}-\d{4}-[A-Z]{2}" placeholder="2025-1234-AB" required>
                 </div>
 
                 <div>
@@ -325,7 +339,7 @@ if ($stmt = $conn->prepare($sql)) {
             </div>
             <hr>
             <h4>Family Background</h4>
-        
+        <hr>
             <div class="form-group">
                 <div>
 
@@ -398,7 +412,7 @@ if ($stmt = $conn->prepare($sql)) {
             </div>
             <hr>
             <div class="form-group">
-                <div class ="p4">
+            <div class ="p4">
                 <label>Are you enjoying other educational financial assistance?</label>
                 </div>
                 <div>
@@ -409,7 +423,12 @@ if ($stmt = $conn->prepare($sql)) {
                         
                     </select>
                 </div>
+                <div> <label for="financial_assistance_details">If yes, please specify:</label>
+                </div>
                 <div>
+                <input type="text" id="financial_assistance_details" name="financial_assistance_details"></div>
+                <div>
+
 
                 </div>
                 
@@ -428,6 +447,7 @@ if ($stmt = $conn->prepare($sql)) {
             </div>
            <hr>
            <h4>Documentary Requirements</h4>
+           <hr>
            <div class="form-group">
                 <div class ="p4">
                     <label>Upload Certificate of Enrollment or Certificate of Registration (COE/COR)</label>
@@ -449,14 +469,13 @@ if ($stmt = $conn->prepare($sql)) {
             </div>
             
            <hr>
-          
-           
-            
             <div class="btn-container">
                 <button type="submit">Register</button>
                 <p>Already have an account? <a href="login.php">Login</a></p>
             </div>
         </form>
+       
+    </div>
        
     </div>
   

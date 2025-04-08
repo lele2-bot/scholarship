@@ -3,27 +3,6 @@ session_start();
 require 'dbConnect.php';
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signin'])) {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['school_id']; // Store user ID
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_email'] = $user['email'];
-        header("Location: userdash.php");
-        exit();
-    } else {
-        $_SESSION['errors']['login'] = "Invalid email or password!";
-        header("Location: index.php");
-        exit();
-    }
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize input data
     $school_id = $_POST["school_id_number"];
@@ -161,6 +140,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					<span class="text">Dashboard</span>
 				</a>
 		</ul>
+        <ul class="side-menu top">
+			<li class="active">
+				<a href="#">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">meow</span>
+				</a>
+		</ul>
         
 		<ul class="side-menu">
 			<li>
@@ -234,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           ?>
           <?php
 
-            // Count for Partial Scholarship
+            // Count for CHED Scholarship
             $sqlched = "SELECT COUNT(*) AS ched_scholarship FROM scholars WHERE type_of_scholarship = 'CHED'";
             $sqlched = $pdo->query($sqlched);
             $rowched = $sqlched->fetch();
@@ -247,10 +233,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $tdp_scholarship = $rowtdp['tdp_scholarship'];
 
              // Count for full Scholarship
-             $sqlFull = "SELECT COUNT(*) AS full_scholarship FROM scholars WHERE type_of_scholarship = 'Full Scholarship'";
+             $sqlFull = "SELECT COUNT(*) AS full_scholarship FROM scholars WHERE type_of_scholarship = 'Full'";
              $stmtFull = $pdo->query($sqlFull);
              $rowFull = $stmtFull->fetch();
              $full_scholarship = $rowFull['full_scholarship'];
+
+              // Count for Partial  Scholarship
+              $sqlPartial = "SELECT COUNT(*) AS partial_scholarship FROM scholars WHERE type_of_scholarship = 'Partial Scholarship'";
+              $sqlPartial = $pdo->query($sqlPartial);
+              $rowPartial = $sqlPartial->fetch();
+              $partial_scholarship = $rowPartial['partial_scholarship'];
             ?>
 
           
@@ -289,7 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <li>
                   <i class='bx bxs-graduation'></i>
                   <span class="text">
-                      <h3><?php echo htmlspecialchars($total_scholars); ?></h3>
+                      <h3><?php echo htmlspecialchars($partial_scholarship); ?></h3>
                       <p>Claire Scholars</p>
                   </span>
               </li>
@@ -306,7 +298,8 @@ $sql = "SELECT school_id_number, type_of_scholarship, firstname, middlename, las
 $stmt = $pdo->query($sql);
 $scholars = $stmt->fetchAll();
 ?>
-
+<br>
+<hr>
 <h2>Full List of Scholars</h2>
 
 <table border="1">
@@ -826,15 +819,19 @@ $scholars = $stmt->fetchAll();
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            font-size: 10px;
+            font-size: 15px;
             text-align: left;
         }
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid black;
             padding: 8px;
         }
         th {
             background-color: #f4f4f4;
+        }
+        
+        p{
+            font-size: 15   px;
         }
 	</style>
 

@@ -1,27 +1,9 @@
+
 <?php
 session_start();
 require 'dbConnect.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signin'])) {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['school_id']; // Store user ID
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_email'] = $user['email'];
-        header("Location: userdash.php");
-        exit();
-    } else {
-        $_SESSION['errors']['login'] = "Invalid email or password!";
-        header("Location: index.php");
-        exit();
-    }
-}
+ 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize input data
@@ -234,18 +216,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
-
+     
+    
 	<!-- SCHOLARSHIP APPLICATION MODAL -->
 	<div id="scholarshipModal" class="modal">
 	<div class="modal-content">
     <span class="close" id="closeModal">&times;</span>
         <h2>Header</h2>
+        <hr>
         <form action="" method="POST">
-        <hr>
-            <h4>PERSONAL INFORMATION</h4>
-        <hr>
         <div class="form-group" >
-		<div>
+		        <div>
+           
                     <label for="type_of_scholarship">Choose Scholarship:</label>
                     <select id="type_of_scholarship" name="type_of_scholarship" required> 
 
@@ -257,11 +239,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                     </select>
                 </div>
+        <div class="form-group">
+                <div >
+                    <label>Upload a 2x2 ID Picture</label>
+                    <input type="file"  id="customfieldid" name="customfieldid"  accept="image/png, image/jpeg, image/jpg, application/pdf" required>                            
+                </div>
+                
         </div>
+        </div>
+
+        <hr>
+            <h4>PERSONAL INFORMATION</h4>
+        <hr>
+       
             <div class="form-group" >
-                <div class ="p1">
-                    <p>Name</p>
-                </div>    
+                
                 <div>
                     <label for="firstname">First Name</label>
                     <input type="text" id="firstname" name="firstname" required>
@@ -270,6 +262,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="middlename">Middle Name</label>
                     <input type="text" id="middlename" name="middlename">
                 </div>
+            </div>
+                <div class="form-group" >
                 <div>
                     <label for="lastname">Last Name</label>
                     <input type="text" id="lastname" name="lastname" required>
@@ -278,18 +272,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="maidenname">Maiden Name (for Married Women):</label>
                     <input type="text" id="maidenname" name="maidenname">
                 </div>
-               
             </div>
-            <div class ="p2">
-                     <p>Permanent Address</p>
-            </div>  
-            
-            <div class = "form-group">
+
+            <div class="form-group" >
+                <div>
+                    <label for="Sex">Sex:</label>
+                         <select id="sex" name="sex" required> 
+                             <option value="none">--SELECT--</option>
+                             <option value="Female">Female</option>
+                             <option value="Male">Male</option>
+                        </select>
+                </div>
+                <div>
+                    <label for="Citizenship">Citizenship</label>
+                    <input type="text" id="citizenship" name="citizenship" required>
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <div>
+                    <label for="MobileNumber">Mobile Number</label>
+                    <input type="text" id="mobilenumber"  name="mobilenumber" pattern="^[0-9]{11}$" placeholder="0922-992-2119" required>
+                </div>
+                <div>
+                    <label for="Email">Email</label>
+                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="someone@gmail.com"required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="TypeOfDisablity">Type of Disability (If applicable)</label>
+                    <input type="text" id="type_of_disability" name="type_of_disability">
+                </div>
+                <div>
+                    <label for="TribalMember">Tribal Membership (If applicable)</label>
+                    <input type="text" id="tribal_member" name="tribal_member">
+                </div>
+            </div>
+
+            <hr>
+            <h4>Place and Date of Birth</h4>
+            <hr> 
+
+            <div class="form-group">
                 <div>
                     <label for="dob">Date Of Birth</label>
                     <input type="date" id="dob" name="dob" required>
                </div>
+               <div>
+                    <label for="StreetandBrgy">Street and Baranggay</label>
+                    <input type="text" id="street_and_brgy1" name="street_and_brgy1" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="TownCityMunicipality">Town/City/Municipality</label>
+                     <input type="text" id="town_city_municipality1" name="town_city_municipality1" required>
+                </div>
+                <div>
+                    <label for="Province">Province</label>
+                     <input type="text" id="province1" name="province1" required>
+                </div>
+            </div>
+
+            <hr>
+            <h4>Permanent Address</h4>
+            <hr> 
             
+            <div class = "form-group">
                 <div>
                     <label for="StreetandBrgy">Street and Baranggay</label>
                     <input type="text" id="street_and_brgy" name="street_and_brgy" required>
@@ -298,6 +350,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="TownCityMunicipality">Town/City/Municipality</label>
                     <input type="text" id="town_city_municipality" name="town_city_municipality" required>
                 </div>
+            </div>
+            
+            <div class = "form-group">
                 <div>
                     <label for="Province">Province</label>
                     <input type="text" id="province" name="province" required>
@@ -308,55 +363,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class ="p1">
-                    <p>Place of Birth</p>
-                </div>  
-                <div>
-                    <label for="StreetandBrgy">Street and Baranggay</label>
-                    <input type="text" id="street_and_brgy1" name="street_and_brgy1" required>
-                </div>
-                <div>
-                    <label for="TownCityMunicipality">Town/City/Municipality</label>
-                     <input type="text" id="town_city_municipality1" name="town_city_municipality1" required>
-                </div>
-                <div>
-                    <label for="Province">Province</label>
-                     <input type="text" id="province1" name="province1" required>
-                </div>
-            <div>
-                    <label for="Sex">Sex:</label>
-                         <select id="sex" name="sex" required> 
-                             <option value="none">--SELECT--</option>
-                             <option value="Female">Female</option>
-                             <option value="Male">Male</option>
-                        </select>
-                </div>
-            </div>
+            
 
-            <div class="form-group">
-                <div>
-                    <label for="TypeOfDisablity">Type of Disability (If applicable)</label>
-                    <input type="text" id="type_of_disability" name="type_of_disability">
-                </div>
-                <div>
-                    <label for="Citizenship">Citizenship</label>
-                    <input type="text" id="citizenship" name="citizenship" required>
-                </div>
-                <div>
-                    <label for="MobileNumber">Mobile Number</label>
-                    <input type="text" id="mobilenumber"  name="mobilenumber" pattern="^[0-9]{11}$" placeholder="0922-992-2119" required>
-                </div>
-                <div>
-                    <label for="Email">Email</label>
-                    <input type="text" id="email" name="email" pattern ="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="someone@gmail.com"required>
-                </div>
-                <div>
-                    <label for="TribalMember">Tribal Membership (If applicable)</label>
-                    <input type="text" id="tribal_member" name="tribal_member">
-                </div>
-            </div>
-
+            <hr>
+            <br>
             <div class="form-group">
                 <div>
                     <label for="SchoolLastAttended">Name of School Last Attended</label>
@@ -367,7 +377,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label for="SchoolIDNumber">School ID Number</label>
                     <input type="text" id="school_id_number" name="school_id_number"  pattern="\d{4}-\d{4}-[A-Z]{2}" placeholder="2025-1234-AB" required>
                 </div>
-
+            </div>
+            <div class="form-group">
                 <div>
                     <label for="SchoolAddress">School Address</label>
                     <input type="text" id="school_address" name="school_address" required>
@@ -384,7 +395,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                     </select>
                 </div>
-
+            </div>
+                <div class="form-group">
                 <div>
                     <label for="SchoolSector">School Sector:</label>
                     <select id="school_sector" name="school_sector" required> 
@@ -394,71 +406,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                     </select>
                 </div> 
-                
             </div>
+
             <hr>
             <h4>Family Background</h4>
         <hr>
-            <div class="form-group">
-                <div>
-
-                </div>
-                  
-                 <div class ="p3">
-                    <label>Father:</label>
-                </div> 
-
-                <div class ="p3">
-                    <label>Mother:</label>
-                </div> 
-
-                
-            </div>
+            
             
             <div class="form-group">
              
-                <div class ="p4">
-                <label>Name</label>
-                </div>
+                
                 <div class = "input1">
+                    <label for = "fathers_name">Fathers Name</label>
                     <input type="text" id="fathers_name" name="fathers_name" required>
                 </div>
                 <div>
+                    <label for = "mothers_name">Mothers Name</label>
                     <input type="text" id="mothers_name" name="mothers_name" required>
                 </div>
                 
             </div>
 
             <div class="form-group">
-                <div class ="p4">
-                <label>Address</label>
-
-                </div>
+                
                 <div>
+                    <label for = "fathers_address">Fathers Address</label>
                     <input type="text" id="fathers_address" name="fathers_address" required>
                 </div>
                 <div>
+                    <label for = "mothers_address">Mothers Address</label>
                     <input type="text" id="mothers_address" name="mothers_address" required>
                 </div>
-                
             </div>
 
             <div class="form-group">
-                <div class ="p4">
-                <label>Occupation</label>
-                </div>
+                
                 <div>
+                    <label for = "fathers_occupation">Fathers Occupation</label>
                     <input type="text" id="fathers_occupation" name="fathers_occupation" required>
                 </div>
                 <div>
+                    <label for = "mothers_occupation">Mothers Occupation</label>
                     <input type="text" id="mothers_occupation" name="mothers_occupation" required>
                 </div>
                 
             </div>
 
             <div class="form-group">
-                <div>
-                </div> 
+                
                 <div>
                     <label for="GrossIncome">Total Parents Gross Income</label>
                     <input type="text" id="gross_income" name="gross_income" required>
@@ -469,9 +464,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 
             </div>
+
             <hr>
+            <br>
             <div class="form-group">
-            <div class ="p4">
+                <div>
                 <label>Are you enjoying other educational financial assistance?</label>
                 </div>
                 <div>
@@ -482,55 +479,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                     </select>
                 </div>
+            </div>
+
+                <div class="form-group">
                 <div> <label for="financial_assistance_details">If yes, please specify:</label>
                 </div>
                 <div>
-                <input type="text" id="financial_assistance_details" name="financial_assistance_details"></div>
-                <div>
-
-
-                </div>
+                <input type="text" id="financial_assistance_details" name="financial_assistance_details">
+            </div>
+                
                 
             </div>
-            <div class="form-group">
-                <div class ="p4">
-                    <label>Upload a 2x2 ID Picture</label>
-                    </div>
-                <div>
-                    <input type="file"  id="customfieldid" name="customfieldid"  accept="image/png, image/jpeg, image/jpg, application/pdf" required>                            
-                    
-                </div>
-                <div>
-
-                </div>
-            </div>
+            
            <hr>
            <h4>Documentary Requirements</h4>
            <hr>
+           <br>
            <div class="form-group">
-                <div class ="p4">
-                    <label>Upload Certificate of Enrollment or Certificate of Registration (COE/COR)</label>
-                    </div>
                 <div>
+                    <label>Upload Certificate of Enrollment or Certificate of Registration (COE/COR)</label>
                     <input type="file"  id="COE_COR" name="COE_COR"  accept="image/png, image/jpeg, image/jpg, application/pdf" required>                            
                     
                 </div>
-                <div class ="p4">
+                <div>
                     <label>Upload Certificate of Indigency</label>
-                    </div>
-                <div>
                     <input type="file"  id="cert_of_indigency" name="cert_of_indigency"  accept="image/png, image/jpeg, image/jpg, application/pdf" required>                            
-                    
                 </div>
-                <div>
-
-                </div>
+                
             </div>
             
            <hr>
             <div class="btn-container">
                 <button type="submit">Register</button>
-                <p>Already have an account? <a href="login.php">Login</a></p>
+                
             </div>
         </form>
        
@@ -573,12 +554,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			overflow-y:auto;
 	    }
 	    .modal-content {
-
+            align-items: center;
             z-index: 1100;
             background: #fff;
             padding: 20px;
-            width: 80%;
-            max-width: 80%;
+            width: 100%;
+            max-width: 50%;
             border-radius: 8px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             position: relative;
@@ -644,10 +625,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             gap: 8px;
             margin-bottom: 15px;
             padding-bottom: 15px;
+           
+            
             
         }
         .form-group div {
             flex: 1 1 calc(20% - 10px);
+            
           
         }
         label {

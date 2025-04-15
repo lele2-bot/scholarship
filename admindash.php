@@ -275,14 +275,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <i class='bx bxs-graduation'></i>
                   <span class="text">
                       <h3><?php echo htmlspecialchars($full_scholarship); ?></h3>
-                      <p>Pakapak Scholars</p>
+                      <p>Full Scholarship</p>
                   </span>
               </li>
               <li>
                   <i class='bx bxs-graduation'></i>
                   <span class="text">
                       <h3><?php echo htmlspecialchars($partial_scholarship); ?></h3>
-                      <p>Claire Scholars</p>
+                      <p>Partial Scholarship</p>
                   </span>
               </li>
 
@@ -363,7 +363,7 @@ $scholars = $stmt->fetchAll();
 
                         <option value="none">--SELECT--</option>
                         <option value="Full Scholarship">Full Scholarship</option>
-                        <option value="Partial Scholarship">Partial Scholarship</option>
+                     v    <option value="Partial Scholarship">Partial Scholarship</option>
                         <option value="TDP">TDP</option>
                         <option value="CHED">CHED</option>
                         

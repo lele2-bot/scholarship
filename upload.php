@@ -1,6 +1,6 @@
 <?php
 if (isset($_POST["submit"])) {
-    $target_dir = "image/"; // Ensure this folder exists in `htdocs`
+    $target_dir = "scholarship/img"; // Ensure this folder exists in `htdocs`
     
     // Ensure the file is set
     if (!isset($_FILES["image"])) {

@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $grossincome = $_POST["gross_income"];
     $noofsiblings = $_POST["no_of_siblings"];
     $othereducationalassistance = $_POST["other_educational_assistance"];
+    $financial_assistance = $_POST["financial_assistance"];
     $customfieldid = $_POST["customfieldid"];
     $coe_cor = $_POST["COE_COR"];
     $certofindigency = $_POST["cert_of_indigency"];
@@ -53,13 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             province1, sex, type_of_disability, citizenship, mobilenumber, email, tribal_member, 
             school_last_attended, school_address, year_level, school_sector, fathers_name, 
             mothers_name, fathers_address, mothers_address, fathers_occupation, mothers_occupation, 
-            gross_income, no_of_siblings, other_educational_assistance, customfieldid, COE_COR, cert_of_indigency, status) 
+            gross_income, no_of_siblings, other_educational_assistance, financial_assistance, customfieldid, COE_COR, cert_of_indigency, status) 
             VALUES (:school_id, :typeofscholarship, :first_name, :middle_name, :last_name, :maiden_name, :dob, :streetandbrgy, 
             :towncitymunicipality, :province, :zipcode, :streetandbrgy1, :towncitymunicipality1, 
             :province1, :sex, :typeofdisability, :citizenship, :mobilenumber, :email, :tribalmember, 
             :schoollastattended, :schooladdress, :yearlevel, :schoolsector, :fathersname, 
             :mothersname, :fathersaddress, :mothersaddress, :fathersoccupation, :mothersoccupation, 
-            :grossincome, :noofsiblings, :othereducationalassistance, :customfieldid, :coe_cor, :certofindigency, :status)";
+            :grossincome, :noofsiblings, :othereducationalassistance, :financial_assistance, :customfieldid, :coe_cor, :certofindigency, :status)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -96,13 +97,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ':grossincome' => $grossincome,
             ':noofsiblings' => $noofsiblings,
             ':othereducationalassistance' => $othereducationalassistance,
+            ':financial_assistance' => $financial_assistance,
             ':customfieldid' => $customfieldid,
             ':coe_cor' => $coe_cor,
             ':certofindigency' => $certofindigency, 
             ':status' => $applicationstatus
         ]);
 
-        echo "<script>alert('Your application was submitted successfully.'); window.location.href='admindash.php';</script>";
+        echo "<script>alert('Your application was submitted successfully.'); window.location.href='userdash.php';</script>";
     } catch (PDOException $e) {
         echo "Unable to submit application: " . $e->getMessage();
     }
@@ -230,7 +232,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            
                     <label for="type_of_scholarship">Choose Scholarship:</label>
                     <select id="type_of_scholarship" name="type_of_scholarship" required> 
-
                         <option value="none">--SELECT--</option>
                         <option value="Full Scholarship">Full Scholarship</option>
                         <option value="Partial Scholarship">Partial Scholarship</option>
@@ -482,10 +483,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
                 <div class="form-group">
-                <div> <label for="financial_assistance_details">If yes, please specify:</label>
+                <div> <label for="financial_assistance">If yes, please specify:</label>
                 </div>
                 <div>
-                <input type="text" id="financial_assistance_details" name="financial_assistance_details">
+                <input type="text" id="financial_assistance" name="financial_assistance">
             </div>
                 
                 
